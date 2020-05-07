@@ -1,21 +1,27 @@
 <template>
   <div>
-    <p>{{'大哥一打三真滴[哈哈]6[哈哈]' | formatEmoji}}</p>
-    <hr>
-    <el-input v-model="value">
+    <el-input v-model="data">
       <el-popover
         v-model="visible"
         slot="suffix"
         placement="bottom"
-        title="标题"
-        width="200"
         trigger="click">
-        <div>
-          <img @click="img1" class="el-emoji" src="https://i0.hdslb.com/bfs/emote/3ad2f66b151496d2a5fb0a8ea75f32265d778dd3.png@112w_112h.webp" alt="图">
+        <!-- emoji select conment-->
+        <div class="el-emoji-conment">
+          <!-- tabs -->
+          <el-tabs v-model="activeTab" >
+            <el-tab-pane v-for="(group, index) in options" :key="group.name" :label="group.name" :name="index + ''">
+              <ul class="el-emoji-list">
+                <li v-for="item in group.list" :key="item.value">
+                  <img @click="appendEmoji(item)" class="el-emoji-item" :src="item.img" :alt="item.value">
+                </li>
+              </ul>
+            </el-tab-pane>
+          </el-tabs>
         </div>
-        <!-- <el-button type="text" slot="reference"> -->
-          <i slot="reference"  class="el-emoji-btn el-input__icon el-icon-picture-outline-round"></i>
-        <!-- </el-button> -->
+        <span slot="reference">
+          <i class="el-emoji-btn el-input__icon el-icon-picture-outline-round"></i>
+        </span>
       </el-popover>
     </el-input>
   </div>
@@ -23,10 +29,61 @@
 
 <script>
 export default {
+  name: 'ElEmojiInput',
+  props: {
+    value: {
+      type: String,
+      default: ''
+    },
+    options : {
+      type: Array,
+      default: ()=> {
+         return [
+        {
+          name: '小黄脸',
+          list: [
+            {
+              value :'微笑',
+              img: 'https://gold-cdn.xitu.io/asset/twemoji/2.6.0/svg/1f603.svg'
+            },
+            {
+              value :'哈哈',
+              img: 'https://gold-cdn.xitu.io/asset/twemoji/2.6.0/svg/1f604.svg'
+            },
+            {
+              value :'流汗',
+              img: 'https://gold-cdn.xitu.io/asset/twemoji/2.6.0/svg/1f605.svg'
+            },
+            {
+              value :'惊喜',
+              img: 'https://gold-cdn.xitu.io/asset/twemoji/2.6.0/svg/1f606.svg'
+            },
+            {
+              value :'天使',
+              img: 'https://gold-cdn.xitu.io/asset/twemoji/2.6.0/svg/1f607.svg'
+            },
+            {
+              value :'恶魔',
+              img: 'https://gold-cdn.xitu.io/asset/twemoji/2.6.0/svg/1f608.svg'
+            },
+            {
+              value :'眨眼',
+              img: 'https://gold-cdn.xitu.io/asset/twemoji/2.6.0/svg/1f609.svg'
+            },
+            {
+              value :'呆了',
+              img: 'https://gold-cdn.xitu.io/asset/twemoji/2.6.0/svg/1f610.svg'
+            }
+          ]
+        }
+      ]
+      }
+    }
+  },
   data() {
     return {
+      activeTab: 0,
       visible: false,
-      value: '你好'
     }
   },
   filters: {
@@ -37,23 +94,49 @@ export default {
       return val
     }
   },
+  computed: {
+    data: {
+      get: function() {
+        return this.value
+      },
+      set: function(v) {
+        this.$emit('input', v)
+      }
+    },
+  },
   mounted() {
   },
   methods: {
-    img1() {
+    appendEmoji(item) {
       this.visible = false
-      this.value = this.value + '[哈哈]'
+      this.data = this.data + `[${item.value}]`
     }
   }
 };
 </script>
 <style lang="scss" scoped>
+  .el-emoji-conment {
+    height: 234px;
+    width: 304px;
+    font-size: 0;
+    overflow: auto;
+    .el-emoji-list {
+      height: 180px;
+      padding: 0px;
+    }
+  }
   .el-emoji-btn {
     &:hover {
       color: red;
     }
   }
-  .el-emoji {
+  .el-emoji-list {
+    list-style: none;
+    li {
+      float: left;
+    }
+  }
+  .el-emoji-item {
     margin: 4px;
     width: 24px;
     height: 24px;
