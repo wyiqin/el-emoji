@@ -127,7 +127,7 @@ export default {
   }
   .el-emoji-btn {
     &:hover {
-      color: red;
+      color: #606266;
     }
   }
   .el-emoji-list {

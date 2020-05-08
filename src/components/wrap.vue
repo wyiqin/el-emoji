@@ -46,39 +46,42 @@ export default {
   },
   data() {
     return {
-      contentStr: ""
     };
   },
   created() {},
   methods: {
     format(arr = []) {
-      console.log("start", this.contentStr, arr);
       if (this.contentStr[0] !== "[") {
         let index = this.contentStr.indexOf("[");
-        arr.push(this.contentStr.slice(0, index));
-        this.contentStr = this.contentStr.slice(index);
+        if(index === -1) {
+          arr.push(this.contentStr);
+          this.contentStr = ''
+        } else {
+          arr.push(this.contentStr.slice(0, index));
+          this.contentStr = this.contentStr.slice(index);
+        }
       } else {
         let index = this.contentStr.indexOf("]");
         if (index === -1) {
           arr.push(this.contentStr);
           this.contentStr = "";
         } else {
-          this.contentStr = this.contentStr.replace( /^\[(.+)\]/, (res, res1) => {
-            console.log(res,res1,'正则');
-            
-              let item = list.find(item => item.value === res1);
-              console.log(item, "find");
+          let index = this.contentStr.indexOf(']')
+          if(index === -1) {
+            arr.push(this.contentStr)
+            this.contentStr = ''
+          } else {
+            let emojiName = this.contentStr.slice(1,index)
+            this.contentStr = this.contentStr.slice(index+1)
+            let item = list.find(item => item.value === emojiName);
               if (item) {
                 arr.push(
                   <img class="el-emoji-item" src={item.img} alt={item.value} />
                 );
               } else {
-                arr.push(res);
+                arr.push(`[${emojiName}]`);
               }
-
-              return "";
-            }
-          );
+          }
         }
       }
       if (this.contentStr) {
@@ -89,10 +92,11 @@ export default {
     }
   },
   watch: {
-    content: {
-      handler() {
-        this.contentStr = this.content;
+    content: { // 防抖优化
+      handler(val) {
+        this.contentStr = val;
         this.domArr = this.format();
+        this.$forceUpdate()
       },
       immediate: true
     }
@@ -107,6 +111,7 @@ export default {
 .el-emoji-item {
   width: 20px;
   height: 20px;
+  padding-right: 2px;
   transform: translateY(2px);
 }
 </style>
