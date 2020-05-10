@@ -37,6 +37,10 @@ const list = [
 export default {
   name: 'ElEmojiWrap',
   props: {
+    emojiClassName: {
+      type: String,
+      default: ''
+    },
     content: {
       type: String,
       default() {
@@ -86,7 +90,7 @@ export default {
             const item = list.find(item => item.value === emojiName)
             if (item) {
               arr.push(
-                <img class='el-emoji-item' src={item.img} alt={item.value} />
+                <img class={'el-emoji-item ' + this.emojiClassName} src={item.img} alt={item.value} />
               )
             } else {
               arr.push(`[${emojiName}]`)
@@ -102,16 +106,19 @@ export default {
     }
   },
   render() {
-    return <span>{...this.domArr}</span>
+    return <div class='el-emoji-wrap'>{...this.domArr}</div>
   }
 }
 </script>
 
 <style scoped>
+.el-emoji-wrap {
+  display: inline-block;
+}
 .el-emoji-item {
-  width: 20px;
-  height: 20px;
-  padding-right: 2px;
-  transform: translateY(2px);
+  vertical-align: text-top;
+  width: 18px;
+  height: auto;
+  margin-right: 2px;
 }
 </style>

@@ -23,8 +23,6 @@ export default {
   filters: {
     formatEmoji(val) {
       val = val.replace(/\[哈哈\]/g, '🙄')
-      console.log(val)
-
       return val
     }
   },

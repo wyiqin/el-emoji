@@ -3,7 +3,7 @@
     <h1>emoji😄</h1>
     <hr><br>
     <label>展示：</label><br>
-    <el-emoji-warp :content="input" />
+    <el-emoji-warp emoji-class-name="abc" :content="input" />
     <br><br>
     <label>输入框：</label>
     <el-emoji-input v-model.lazy="input" />
@@ -36,6 +36,15 @@ export default {
   }
 }
 </script>
+<style lang="scss">
+.abc {
+  &:hover {
+    -webkit-box-shadow: inset 0 1px 1px rgba(0,0,0,.075),0 0 8px rgba(102,175,233,.6);
+    box-shadow: inset 0 1px 1px rgba(0,0,0,.075),0 0 8px rgba(102,175,233,.6)
+  }
+  border-bottom: 1px dashed;
+}
+</style>>
 
 <style scoped>
 .hello {
