@@ -1,14 +1,27 @@
 <template>
   <div>
-    <el-input v-if="type === 'input'" v-model="data">
-      <options slot="suffix" placement="bottom-end" @append="append">
-        <i class="el-emoji-btn el-input__icon el-icon-picture-outline-round" />
-      </options>
-    </el-input>
+    <div v-if="mytype === 'input'">
+      <slot>
+        <el-input v-model="data">
+          <options slot="suffix" placement="bottom-end" @append="append">
+            <i class="el-emoji-btn el-input__icon el-icon-picture-outline-round" />
+          </options>
+        </el-input>
+      </slot>
+      <span v-if="$slots.default" ref="suffix" class="el-input__suffix">
+        <span class="el-input__suffix-inner">
+          <options slot="suffix" placement="bottom-end" @append="append">
+            <i data-v-45dba22c class="el-emoji-btn el-input__icon el-icon-picture-outline-round" />
+          </options>
+        </span>
+      </span>
+    </div>
     <div v-else>
-      <el-input v-model="data" type="textarea" />
+      <slot>
+        <el-input v-model="data" type="textarea" />
+      </slot>
       <options @append="append">
-        <el-button size="mini" icon="el-icon-picture-outline-round">表情</el-button>
+        <el-button style="margin-top:3px" size="mini" icon="el-icon-picture-outline-round">表情</el-button>
       </options>
     </div>
   </div>
@@ -19,12 +32,6 @@ export default {
   name: 'ElEmojiInput',
   components: {
     options: () => import('./options')
-  },
-  filters: {
-    formatEmoji(val) {
-      val = val.replace(/\[哈哈\]/g, '🙄')
-      return val
-    }
   },
   props: {
     value: {
@@ -50,13 +57,27 @@ export default {
       set: function(v) {
         this.$emit('input', v)
       }
+    },
+    mytype() {
+      if (this.$slots.default) {
+        return this.$slots.default[0].componentOptions.propsData.type || 'input'
+      } else {
+        return this.type
+      }
     }
   },
   mounted() {
+    if (this.$slots.default && this.mytype === 'input') {
+      this.$slots.default[0].elm.append(this.$refs.suffix)
+    }
   },
   methods: {
     append(item) {
-      this.data = this.data + `[${item.value}]`
+      if (this.$slots.default) {
+        this.$slots.default[0].componentInstance.$emit('input', this.$slots.default[0].componentInstance.value + `[${item.value}]`)
+      } else {
+        this.data += `[${item.value}]`
+      }
     }
   }
 }

@@ -84,7 +84,6 @@ export default {
     appendEmoji(item) {
       this.visible = false
       this.$emit('append', item)
-      // this.data = this.data + `[${item.value}]`
     }
   }
 }
@@ -115,7 +114,6 @@ export default {
   }
   .el-emoji-opt-btn {
     display: inline-block;
-    margin-top: 3px;
   }
 
 </style>
