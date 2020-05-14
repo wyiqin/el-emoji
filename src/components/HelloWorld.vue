@@ -7,20 +7,21 @@
     <br><br>
     <label>输入框：</label>
     <el-emoji-input v-model.lazy="input" />
-    <br>
+    <p style="font-size:10px">插槽</p>
     <el-emoji-input>
       <el-input v-model="input" size="mini" />
     </el-emoji-input>
     <br>
     <label>文本域：</label>
     <el-emoji-input v-model.lazy="input" type="textarea" />
-    <br>
+    <p style="font-size:10px">插槽</p>
     <el-emoji-input>
       <el-input v-model="input" type="textarea" maxlength="100" show-word-limit />
     </el-emoji-input>
     <br><hr><br>
     <label>选择框：</label><br>
-    <el-emoji-select v-model="select" />
+    <!-- $attrs 传入属性，事件emit -->
+    <el-emoji-select v-model="select" clearable placeholder="请选择" />
     <br>
   </div>
 </template>

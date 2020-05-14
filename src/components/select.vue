@@ -5,9 +5,7 @@
     </div>
     <el-select
       v-model="data"
-      reserve-keyword
-      clearable
-      :placeholder="currentPlaceholder"
+      v-bind="$attrs"
     >
       <el-option
         v-for="item in eOptions"
